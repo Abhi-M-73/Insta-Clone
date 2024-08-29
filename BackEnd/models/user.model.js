@@ -14,4 +14,4 @@ const userSchema = new mongoose.Schema({
     bookmark:[{ type:mongoose.Schema.Types.ObjectId, ref: "Post"}],
 }, {timestamps:true})
 
-export default userSchema = mongoose.model('User', userSchema);
+export default User = mongoose.model('User', userSchema);

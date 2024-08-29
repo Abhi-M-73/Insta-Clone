@@ -7,4 +7,4 @@ const messageSchema = new mongoose.Schema({
 
 }) 
 
-export default messageSchema = mongoose.model('Message', messageSchema)
+export default Message = mongoose.model('Message', messageSchema)

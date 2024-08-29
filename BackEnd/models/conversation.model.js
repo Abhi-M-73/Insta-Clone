@@ -5,4 +5,4 @@ const conversationSchema = new mongoose.Schema({
     message: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message"}],
 })
 
-export default conversationSchema = mongoose.model('Conversation', conversationSchema)
+export default Conversation = mongoose.model('Conversation', conversationSchema)
