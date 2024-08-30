@@ -2,7 +2,8 @@ import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from 'cookie-parser';
 import dotenv from "dotenv";
-import connectDB from "./utils/db.js"
+import connectDB from "./utils/db.js";
+import userRoute from "./routes/user.route.js"
 dotenv.config({})
 
 
@@ -12,12 +13,9 @@ const PORT = process.env.PORT || 3000
 
 // routes start
 
-app.get("/", (req, res) => {
-    return res.status(200).json({
-        message: " I am abhishek ",
-        success: true
-    })
-})
+
+
+
 
 // routes end
 
@@ -25,15 +23,18 @@ app.get("/", (req, res) => {
 
 // middwares start
 app.use(cookieParser())
-app.use(express.json())
 app.use(urlencoded({ extended: true }))
+app.use(express.json())
 const corsOptions = {
     origin: "https://localhost:5173",
     Credentials: true
 }
 app.use(cors(corsOptions))
 
+
 // middlewares end
+
+app.use("/api/v1/user", userRoute)
 
 app.listen(PORT, () => {
     connectDB()
