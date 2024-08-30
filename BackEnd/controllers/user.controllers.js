@@ -114,44 +114,62 @@ export const getProfile = async (req, res) => {
 export const editProfile = async (req, res) => {
     try {
         const userId = rq.id         // taking id from isAuthenticated
-        const {bio, gender} = req.body;
+        const { bio, gender } = req.body;
         const profilePicture = req.file;
 
         let cloudResponse;
 
-        if(profilePicture){
+        if (profilePicture) {
             const fileUri = getDataUri(profilePicture);
             cloudResponse = await cloudinary.uploader.upload(fileUri);
         }
         const user = await User.findById(userId);
-        if(!user){
+        if (!user) {
             return res.status(404).json({
                 message: "User not found",
                 success: false
             })
         }
-        if(bio){
-             user.bio = bio;
+        if (bio) {
+            user.bio = bio;
         }
-        if(gender){
+        if (gender) {
             user.gender = gender;
-       }
-        if(profilePicture){
+        }
+        if (profilePicture) {
             user.profilePicture = cloudResponse.secure_uri;
         }
 
         await user.save();
         return res.status(404).json({
             message: "Profile updated successfully",
-            success: false
+            success: true
         })
-        
+
     } catch (error) {
         console.log(error);
-        
+
     }
 }
 
+export const getSuggestedUser = async (req, res) => {
+    try {
+        const SuggestedUser = await User.find({ _id: { $ne: req.id } }).select("-password");
+        if (!SuggestedUser) {
+            return res.status(400).json({
+                message: "Currently do not have any user",
 
+            })
+
+        }
+        return res.status(200).json({
+            success: true,
+            users: SuggestedUser
+        })
+    } catch (error) {
+        console.log(error);
+
+    }
+}
 
 
