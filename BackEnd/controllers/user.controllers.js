@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../Cloudinary.js";
+import { json } from "express";
 
 export const register = async (req, res) => {
     try {
@@ -169,6 +170,55 @@ export const getSuggestedUser = async (req, res) => {
     } catch (error) {
         console.log(error);
 
+    }
+}
+
+export const followOrUnfollow = async(req , res)=>{
+    try {
+        const followerPerson = req.id;
+        const followingPerson = req.params.id;
+        if (follower === following) {
+            return res.status(400).json({
+                message : "You can not follow or unfollow",
+                success : false
+            })
+        }
+
+        const user = await User.findById(followerPerson);
+        const targetUser = await User.findById(followingPerson);
+        if (!user || targetUser) {
+            return res.status(400).json({
+                message : "User not found",
+                success : false
+            })
+        }
+
+        //here to check we are follow or unfollow
+        const isFollowing = user.following.includes(targetUser)
+        if (isFollowing) {
+            //unfollow logic
+            await Promise.all([
+                User.updateOne({_id:followerPerson}, {$pull:{following: followingPerson}}),
+                User.updateOne({_id:followingPerson}, {$pull:{followers: followerPerson}})
+            ])
+            return res.status(200).json({
+                message : "Unfollowed Successfully",
+                success : true
+            })
+        } else {
+            //follow logic
+            await Promise.all([
+                User.updateOne({_id:followerPerson}, {$push:{following: followingPerson}}),
+                User.updateOne({_id:followingPerson}, {$push:{followers: followerPerson}})
+            ])
+            return res.status(200).json({
+                message : "Followed Successfully",
+                success : true
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        
     }
 }
 
