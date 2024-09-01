@@ -11,13 +11,13 @@ const app = express();
 
 const PORT = process.env.PORT || 3000
 
-// routes start
 
 
 
 
 
-// routes end
+
+
 
 
 
@@ -34,7 +34,13 @@ app.use(cors(corsOptions))
 
 // middlewares end
 
+
+// routes start
+
 app.use("/api/v1/user", userRoute)
+
+// routes end
+
 
 app.listen(PORT, () => {
     connectDB()

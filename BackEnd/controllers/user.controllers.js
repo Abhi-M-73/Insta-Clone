@@ -228,22 +228,29 @@ export const followOrUnfollow = async (req, res) => {
     const follower = await User.findById(followerId);
     const following = await User.findById(followingId);
 
-    if (!follower || !following) {
+    if (!follower) {
       return res.status(404).json({
-        message: "User not found.",
+        message: "Follower user not found.",
         success: false,
       });
     }
 
-    const isFollowing = follower.followings.includes(followingId);
+    if (!following) {
+      return res.status(404).json({
+        message: "Following user not found.",
+        success: false,
+      });
+    }
+
+    const isFollowing = follower.following.includes(followingId);
 
     if (isFollowing) {
       // Unfollow logic
-      follower.followings.pull(followingId);
+      follower.following.pull(followingId);
       following.followers.pull(followerId);
     } else {
       // Follow logic
-      follower.followings.push(followingId);
+      follower.following.push(followingId);
       following.followers.push(followerId);
     }
 
