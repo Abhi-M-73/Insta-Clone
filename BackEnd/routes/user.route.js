@@ -5,14 +5,17 @@ import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 
 
-const router = express.Router()
-router.route('/register').post(register);
-router.route('/login').post(login);
-router.route('/logout').get(login);
-router.route('/:id/profile').get(isAuthenticated, getProfile);
-router.route('/profile/edit').post(isAuthenticated, upload.single('profilePicture'), editProfile);
-router.route('/suggested').get(isAuthenticated, getSuggestedUsers);
-router.route('/followOrUnfollow/:id').post(isAuthenticated, followOrUnfollow);
 
 
-export default router;
+
+const userrouter = express.Router()
+userrouter.route('/register').post(register);
+userrouter.route('/login').post(login);
+userrouter.route('/logout').get(logout);
+userrouter.route('/:id/profile').get(isAuthenticated, getProfile);
+userrouter.route('/profile/edit').post(isAuthenticated, upload.single('profilePicture'), editProfile);
+userrouter.route('/suggested').get(isAuthenticated, getSuggestedUsers);
+userrouter.route('/followOrUnfollow/:id').post(isAuthenticated, followOrUnfollow);
+
+
+export default userrouter;

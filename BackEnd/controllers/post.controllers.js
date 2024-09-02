@@ -3,10 +3,9 @@ import sharp from "sharp";
 import User from "../models/user.model.js";
 import Post from "../models/post.model.js";
 import Comment from "../models/post.model.js"
-import { populate } from "dotenv";
-import { json } from "express";
 
-export const post = async (req, res) => {
+
+export const addNewPost = async (req, res) => {
     try {
         const { caption } = req.body;
         const image = req.file;
@@ -216,7 +215,7 @@ export const getCommentOfPost = async (req, res) => {
 
 
 
-export const deleteComment = async (req, res) => {
+export const deletePost = async (req, res) => {
     try {
         const postId = req.params.id;
         const authorId = req.id;
@@ -281,7 +280,7 @@ export const bookmarkPost = async(req, res)=>{
             await user.save();
             return res.status(200).json({
                 type: "unsaved",
-                message: "Post remove from bookmark";
+                message: "Post remove from bookmark",
                 success: true
             })
             
@@ -291,7 +290,7 @@ export const bookmarkPost = async(req, res)=>{
             await user.save();
             return res.status(200).json({
                 type: "saved",
-                message: "Post bookmark added";
+                message: "Post bookmark added",
                 success: true
             })
 
@@ -301,3 +300,5 @@ export const bookmarkPost = async(req, res)=>{
         
     }
 }
+
+

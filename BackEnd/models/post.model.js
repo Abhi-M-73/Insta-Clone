@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 
+
 const postSchema = new mongoose.Schema({
     caption:{ type: String, dafault: ""},
     image:{ type: String , reqired: true},
@@ -9,4 +10,6 @@ const postSchema = new mongoose.Schema({
     comments:[{type: mongoose.Schema.Types.ObjectId, ref: "Comment",}]
 })
 
-export const Post  = mongoose.Model('Post', postSchema);
+ const Post  = mongoose.model("Post", postSchema);
+
+export default Post;

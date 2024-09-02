@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
@@ -76,6 +77,16 @@ export const login = async (req, res) => {
       expiresIn: "1d",
     });
 
+    const populatedPosts = await Promise.all(
+      user.posts.map(async (postId) => {
+        const post = await Post.findById(postId);
+        if (post.author.equals(user._id)) {
+          return post;
+        }
+        return null
+      })
+    )
+
     return res
       .cookie("token", token, {
         httpOnly: true,
@@ -93,7 +104,7 @@ export const login = async (req, res) => {
           profilePicture: user.profilePicture,
           followers: user.followers,
           followings: user.followings,
-          posts: user.posts,
+          posts: populatedPosts,
         },
       });
   } catch (error) {
@@ -124,7 +135,7 @@ export const getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
     // console.log(userId);
-    
+
 
     const user = await User.findById(userId).select("-password");
 
